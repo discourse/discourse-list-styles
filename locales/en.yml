@@ -1,0 +1,6 @@
+en:
+  theme_metadata:
+    description: Three curated topic list styles - plain, thumbnail list, and card
+      grid - routed per category or tag
+    settings:
+      example_setting: A description of a setting.
