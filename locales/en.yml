@@ -1,6 +1,18 @@
 en:
   theme_metadata:
-    description: Three curated topic list styles - plain, thumbnail list, and card
-      grid - routed per category or tag
+    description: "Three curated topic list styles, plain, thumbnail list, and card grid, routed per category or tag"
     settings:
-      example_setting: A description of a setting.
+      allow_style_switching: >-
+        Show a style selector on topic lists so visitors can override the
+        configured style. Their choice is remembered per category and tag in
+        their browser.
+      list_styles: >-
+        Topic list style rules. A rule applies to the categories and tags it
+        lists; the first matching rule wins. A rule with no categories and no
+        tags sets the default style for all other lists.
+  selector:
+    title: "List style"
+    default: "Default"
+    plain: "Plain"
+    thumbnails: "Thumbnails"
+    cards: "Cards"

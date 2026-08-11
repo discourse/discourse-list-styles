@@ -1,0 +1,21 @@
+.topic-list.list-styles {
+  .topic-list-data {
+    padding-block: var(--list-styles-row-padding);
+  }
+
+  // toggle rendered in nav controls instead
+  .topic-list-header {
+    button.bulk-select {
+      display: none;
+    }
+  }
+
+  .topic-excerpt {
+    margin-top: var(--space-1);
+    color: var(--primary-medium);
+  }
+
+  .link-bottom-line {
+    margin-top: var(--space-1);
+  }
+}

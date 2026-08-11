@@ -9,5 +9,20 @@
   "minimum_discourse_version": null,
   "maximum_discourse_version": null,
   "assets": {},
-  "modifiers": {}
+  "modifiers": {
+    "serialize_topic_excerpts": true,
+    "svg_icons": [
+      "far-comment",
+      "sliders",
+      "far-newspaper",
+      "far-images",
+      "far-rectangle-list",
+      "arrows-rotate"
+    ],
+    "topic_thumbnail_sizes": [
+      [400, 400],
+      [600, 600],
+      [800, 800]
+    ]
+  }
 }

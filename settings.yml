@@ -1,2 +1,40 @@
-example_setting:
+allow_style_switching:
+  type: bool
   default: true
+
+list_styles:
+  type: objects
+  default:
+    - label: Default
+      style: plain
+    - label: Thumbnails
+      style: thumbnail-list
+    - label: Cards
+      style: card-grid
+  schema:
+    name: rule
+    identifier: label
+    properties:
+      label:
+        type: string
+        required: true
+        validations:
+          max_length: 100
+      style:
+        type: enum
+        required: true
+        default: plain
+        choices:
+          - plain
+          - thumbnail-list
+          - card-grid
+      categories:
+        type: categories
+      include_subcategories:
+        type: boolean
+        default: true
+      tags:
+        type: tags
+      show_excerpt:
+        type: boolean
+        default: true

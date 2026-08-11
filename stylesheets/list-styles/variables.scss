@@ -1,0 +1,12 @@
+:root {
+  --list-styles-thumb-aspect: 16 / 9;
+  --list-styles-thumb-width: 11.25rem;
+  --list-styles-thumb-radius: var(--d-border-radius-large);
+  --list-styles-grid-min: 17rem;
+  --list-styles-grid-gap: var(--space-6);
+  --list-styles-card-radius: var(--d-border-radius-large);
+  --list-styles-card-padding: var(--space-3);
+  --list-styles-card-background: var(--secondary);
+  --list-styles-card-shadow: 0 1px 3px rgb(0, 0, 0, 0.08);
+  --list-styles-row-padding: var(--space-4);
+}
