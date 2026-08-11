@@ -2,15 +2,26 @@ allow_style_switching:
   type: bool
   default: true
 
+default_style:
+  type: enum
+  default: list-plain
+  choices:
+    - list-plain
+    - list-thumbnails
+    - grid-cards
+
 list_styles:
   type: objects
   default:
-    - label: Default
-      style: plain
+    - label: List
+      style: list-plain
+      icon: far-rectangle-list
     - label: Thumbnails
-      style: thumbnail-list
+      style: list-thumbnails
+      icon: far-newspaper
     - label: Cards
-      style: card-grid
+      style: grid-cards
+      icon: far-images
   schema:
     name: rule
     identifier: label
@@ -20,14 +31,16 @@ list_styles:
         required: true
         validations:
           max_length: 100
+      icon:
+        type: string
       style:
         type: enum
         required: true
-        default: plain
+        default: list-plain
         choices:
-          - plain
-          - thumbnail-list
-          - card-grid
+          - list-plain
+          - list-thumbnails
+          - grid-cards
       categories:
         type: categories
       include_subcategories:

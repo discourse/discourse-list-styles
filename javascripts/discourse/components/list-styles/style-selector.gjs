@@ -9,14 +9,16 @@ import DDropdownMenu from "discourse/ui-kit/d-dropdown-menu";
 import dConcatClass from "discourse/ui-kit/helpers/d-concat-class";
 import { i18n } from "discourse-i18n";
 import {
-  CARD_GRID,
   overrideStyleFor,
-  PLAIN,
   resolveRule,
-  THUMBNAIL_LIST,
+  STYLE_ICONS,
 } from "../../lib/list-styles";
 
 const AUTO = "auto";
+
+function iconFor(rule) {
+  return rule.icon || STYLE_ICONS[rule.style] || "sliders";
+}
 
 export default class StyleSelector extends Component {
   @service discovery;
@@ -27,49 +29,57 @@ export default class StyleSelector extends Component {
     return (
       settings.allow_style_switching &&
       this.discovery.onDiscoveryRoute &&
-      !this.router.currentRoute?.metadata?.customTopicListStyle
+      !this.router.currentRoute?.metadata?.customTopicListStyle &&
+      this.presetItems.length > 0
     );
   }
 
-  get scope() {
-    return this.listStyleOverride.scopeFor({
+  get scopeArgs() {
+    return {
       category: this.discovery.category,
       tag: this.discovery.tag,
-    });
+    };
+  }
+
+  get scope() {
+    return this.listStyleOverride.scopeFor(this.scopeArgs);
   }
 
   get current() {
     return this.listStyleOverride.styleFor(this.scope) ?? AUTO;
   }
 
-  get styles() {
-    return [
-      { id: PLAIN, icon: "far-rectangle-list", label: "selector.plain" },
-      {
-        id: THUMBNAIL_LIST,
-        icon: "far-newspaper",
-        label: "selector.thumbnails",
-      },
-      { id: CARD_GRID, icon: "far-images", label: "selector.cards" },
-    ];
+  get presetItems() {
+    const seen = new Set();
+
+    return settings.list_styles
+      .filter((rule) => !seen.has(rule.style) && seen.add(rule.style))
+      .map((rule) => ({
+        style: rule.style,
+        label: rule.label,
+        icon: iconFor(rule),
+      }));
+  }
+
+  get resetItem() {
+    return {
+      label: i18n(themePrefix("selector.default")),
+      icon: "arrows-rotate",
+    };
   }
 
   get triggerIcon() {
-    const scopeArgs = {
-      category: this.discovery.category,
-      tag: this.discovery.tag,
-    };
+    const overrideStyle = overrideStyleFor(
+      this.listStyleOverride,
+      this.scopeArgs
+    );
 
-    const effectiveStyle = resolveRule({
-      ...scopeArgs,
-      overrideStyle: overrideStyleFor(this.listStyleOverride, scopeArgs),
-    }).style;
+    if (overrideStyle) {
+      const preset = this.presetItems.find((p) => p.style === overrideStyle);
+      return preset?.icon ?? STYLE_ICONS[overrideStyle] ?? "sliders";
+    }
 
-    return this.styles.find((s) => s.id === effectiveStyle)?.icon ?? "sliders";
-  }
-
-  get defaultStyle() {
-    return { id: AUTO, icon: "arrows-rotate", label: "selector.default" };
+    return iconFor(resolveRule(this.scopeArgs));
   }
 
   @action
@@ -94,15 +104,15 @@ export default class StyleSelector extends Component {
       >
         <:content>
           <DDropdownMenu as |dropdown|>
-            {{#each this.styles as |style|}}
+            {{#each this.presetItems as |item|}}
               <dropdown.item>
                 <DButton
-                  @icon={{style.icon}}
-                  @label={{themePrefix style.label}}
-                  @action={{fn this.select style.id}}
+                  @icon={{item.icon}}
+                  @translatedLabel={{item.label}}
+                  @action={{fn this.select item.style}}
                   class={{dConcatClass
                     "btn-transparent list-style-selector__option"
-                    (if (eq this.current style.id) "--active")
+                    (if (eq this.current item.style) "--active")
                   }}
                 />
               </dropdown.item>
@@ -112,12 +122,12 @@ export default class StyleSelector extends Component {
 
             <dropdown.item>
               <DButton
-                @icon={{this.defaultStyle.icon}}
-                @label={{themePrefix this.defaultStyle.label}}
-                @action={{fn this.select this.defaultStyle.id}}
+                @icon={{this.resetItem.icon}}
+                @translatedLabel={{this.resetItem.label}}
+                @action={{fn this.select "auto"}}
                 class={{dConcatClass
                   "btn-transparent list-style-selector__option"
-                  (if (eq this.current this.defaultStyle.id) "--active")
+                  (if (eq this.current "auto") "--active")
                 }}
               />
             </dropdown.item>

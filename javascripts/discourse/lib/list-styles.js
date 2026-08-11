@@ -1,8 +1,10 @@
-export const PLAIN = "plain";
-export const THUMBNAIL_LIST = "thumbnail-list";
-export const CARD_GRID = "card-grid";
+export const LIST = "list-plain";
+export const THUMBNAIL_LIST = "list-thumbnails";
+export const CARD_GRID = "grid-cards";
 
-const DEFAULT_RULE = { style: PLAIN, show_excerpt: true };
+function defaultRule() {
+  return { style: settings.default_style, show_excerpt: true };
+}
 
 function categoryMatches(rule, category) {
   if (!rule.categories?.length) {
@@ -26,6 +28,12 @@ function tagMatches(rule, tag) {
   return !!tag && rule.tags.includes(tag.id);
 }
 
+export const STYLE_ICONS = {
+  [LIST]: "far-rectangle-list",
+  [THUMBNAIL_LIST]: "far-newspaper",
+  [CARD_GRID]: "far-images",
+};
+
 export function overrideStyleFor(overrideService, scopeArgs) {
   if (!settings.allow_style_switching) {
     return null;
@@ -39,7 +47,7 @@ function isScoped(rule) {
 
 export function resolveRule({ category, tag, forcedStyle, overrideStyle }) {
   if (forcedStyle) {
-    return { ...DEFAULT_RULE, style: forcedStyle };
+    return { ...defaultRule(), style: forcedStyle };
   }
 
   const matches = (rule) =>
@@ -47,8 +55,7 @@ export function resolveRule({ category, tag, forcedStyle, overrideStyle }) {
 
   const rule =
     settings.list_styles.find((r) => isScoped(r) && matches(r)) ??
-    settings.list_styles.find((r) => !isScoped(r)) ??
-    DEFAULT_RULE;
+    defaultRule();
 
   if (overrideStyle) {
     return { ...rule, style: overrideStyle };
