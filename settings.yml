@@ -1,16 +1,4 @@
-allow_style_switching:
-  type: bool
-  default: true
-
-default_style:
-  type: enum
-  default: list-plain
-  choices:
-    - list-plain
-    - list-thumbnails
-    - grid-cards
-
-list_styles:
+list_style_rules:
   type: objects
   default:
     - label: List
@@ -43,11 +31,27 @@ list_styles:
           - grid-cards
       categories:
         type: categories
+      tags:
+        type: tags
       include_subcategories:
         type: boolean
         default: true
-      tags:
-        type: tags
       show_excerpt:
         type: boolean
         default: true
+
+default_list_style:
+  type: enum
+  default: list-plain
+  choices:
+    - list-plain
+    - list-thumbnails
+    - grid-cards
+
+default_show_excerpt:
+  type: bool
+  default: false
+
+allow_style_switching:
+  type: bool
+  default: true

@@ -3,7 +3,10 @@ export const THUMBNAIL_LIST = "list-thumbnails";
 export const CARD_GRID = "grid-cards";
 
 function defaultRule() {
-  return { style: settings.default_style, show_excerpt: true };
+  return {
+    style: settings.default_list_style,
+    show_excerpt: settings.default_show_excerpt,
+  };
 }
 
 function categoryMatches(rule, category) {
@@ -54,7 +57,7 @@ export function resolveRule({ category, tag, forcedStyle, overrideStyle }) {
     categoryMatches(rule, category) && tagMatches(rule, tag);
 
   const rule =
-    settings.list_styles.find((r) => isScoped(r) && matches(r)) ??
+    settings.list_style_rules.find((r) => isScoped(r) && matches(r)) ??
     defaultRule();
 
   if (overrideStyle) {

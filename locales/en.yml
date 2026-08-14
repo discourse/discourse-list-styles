@@ -6,9 +6,11 @@ en:
         Show a style selector on topic lists so visitors can override the
         configured style. Their choice is remembered per category and tag in
         their browser.
-      default_style: >-
+      default_list_style: >-
         The style used by topic lists that no rule applies to.
-      list_styles: >-
+      default_show_excerpt: >-
+        Show topic excerpts on topic lists that no rule applies to.
+      list_style_rules: >-
         Topic list style rules. A rule applies to the categories and tags it
         lists; the first matching rule wins. Every rule also appears as a
         choice in the style selector, so a rule without categories and tags

@@ -52,7 +52,7 @@ export default class StyleSelector extends Component {
   get presetItems() {
     const seen = new Set();
 
-    return settings.list_styles
+    return settings.list_style_rules
       .filter((rule) => !seen.has(rule.style) && seen.add(rule.style))
       .map((rule) => ({
         style: rule.style,
