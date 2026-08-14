@@ -12,7 +12,14 @@
   "modifiers": {
     "serialize_topic_excerpts": true,
     "svg_icons": [
-      "far-comment",
+      "kiwi-bird",
+      "frog",
+      "hippo",
+      "cat",
+      "dog",
+      "crow",
+      "horse",
+      "fish",
       "sliders",
       "far-newspaper",
       "far-images",

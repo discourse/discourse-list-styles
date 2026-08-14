@@ -5,6 +5,16 @@ import dIcon from "discourse/ui-kit/helpers/d-icon";
 const RESPONSIVE_RATIOS = [1, 1.5, 2];
 const DISPLAY_WIDTH = 400;
 const FALLBACK_WIDTH = 1110;
+const PLACEHOLDER_ICONS = [
+  "kiwi-bird",
+  "frog",
+  "hippo",
+  "cat",
+  "dog",
+  "crow",
+  "horse",
+  "fish",
+];
 
 export default class TopicThumbnail extends Component {
   get topic() {
@@ -13,6 +23,10 @@ export default class TopicThumbnail extends Component {
 
   get hasThumbnail() {
     return !!this.topic.thumbnails;
+  }
+
+  get placeholderIcon() {
+    return PLACEHOLDER_ICONS[this.topic.id % PLACEHOLDER_ICONS.length];
   }
 
   get original() {
@@ -73,7 +87,7 @@ export default class TopicThumbnail extends Component {
         />
       {{else}}
         <div class="list-styles-thumbnail__placeholder">
-          {{dIcon "far-comment"}}
+          {{dIcon this.placeholderIcon}}
         </div>
       {{/if}}
     </a>
