@@ -59,8 +59,8 @@
 
   &__badge,
   &__title,
-  &__excerpt,
-  &__meta {
+  &__meta,
+  .topic-excerpt {
     padding-inline: var(--list-styles-card-padding);
   }
 
@@ -72,7 +72,7 @@
     }
   }
 
-  &__excerpt {
+  .topic-excerpt {
     display: block;
     color: var(--primary-medium);
   }
@@ -83,7 +83,7 @@
     justify-content: space-between;
     gap: var(--space-2);
     color: var(--primary-medium);
-    font-size: var(--font-down-1);
+    font-size: var(--font-down-1-rem);
 
     a {
       color: inherit;

@@ -4,6 +4,7 @@ import dIcon from "discourse/ui-kit/helpers/d-icon";
 
 const RESPONSIVE_RATIOS = [1, 1.5, 2];
 const DISPLAY_WIDTH = 400;
+const FALLBACK_WIDTH = 1110;
 
 export default class TopicThumbnail extends Component {
   get topic() {
@@ -38,11 +39,11 @@ export default class TopicThumbnail extends Component {
   }
 
   get fallbackSrc() {
-    const largeEnough = this.topic.thumbnails.filter(
-      (t) => t.url && t.max_width > DISPLAY_WIDTH * RESPONSIVE_RATIOS.at(-1)
+    const fallback = this.topic.thumbnails.find(
+      (t) => t.url && t.max_width === FALLBACK_WIDTH
     );
 
-    return (largeEnough.at(-1) ?? this.original).url;
+    return (fallback ?? this.original).url;
   }
 
   get url() {
@@ -58,8 +59,7 @@ export default class TopicThumbnail extends Component {
         "list-styles-thumbnail"
         (if this.hasThumbnail "has-thumbnail" "no-thumbnail")
       }}
-      role="img"
-      aria-label={{this.topic.title}}
+      aria-hidden="true"
       tabindex="-1"
     >
       {{#if this.hasThumbnail}}

@@ -48,6 +48,22 @@ function isScoped(rule) {
   return !!(rule.categories?.length || rule.tags?.length);
 }
 
+export function resolveActiveRule(owner, overrides = {}) {
+  const discovery = owner.lookup("service:discovery");
+  const router = owner.lookup("service:router");
+  const override = owner.lookup("service:list-style-override");
+
+  const category = overrides.category ?? discovery.category;
+  const tag = overrides.tag ?? discovery.tag;
+
+  return resolveRule({
+    category,
+    tag,
+    forcedStyle: router.currentRoute?.metadata?.customTopicListStyle,
+    overrideStyle: overrideStyleFor(override, { category, tag }),
+  });
+}
+
 export function resolveRule({ category, tag, forcedStyle, overrideStyle }) {
   if (forcedStyle) {
     return { ...defaultRule(), style: forcedStyle };

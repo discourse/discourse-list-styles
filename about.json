@@ -6,7 +6,7 @@
   "license_url": "TODO: Put your theme's LICENSE URL here",
   "learn_more": "TODO",
   "theme_version": "0.0.1",
-  "minimum_discourse_version": null,
+  "minimum_discourse_version": "2026.5.0",
   "maximum_discourse_version": null,
   "assets": {},
   "modifiers": {
@@ -22,7 +22,8 @@
     "topic_thumbnail_sizes": [
       [400, 400],
       [600, 600],
-      [800, 800]
+      [800, 800],
+      [1110, 1110]
     ]
   }
 }

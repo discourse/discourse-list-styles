@@ -1,6 +1,7 @@
 import Component from "@glimmer/component";
 import { fn } from "@ember/helper";
 import { action } from "@ember/object";
+import { getOwner } from "@ember/owner";
 import { service } from "@ember/service";
 import DMenu from "discourse/float-kit/components/d-menu";
 import { eq } from "discourse/truth-helpers";
@@ -10,7 +11,7 @@ import dConcatClass from "discourse/ui-kit/helpers/d-concat-class";
 import { i18n } from "discourse-i18n";
 import {
   overrideStyleFor,
-  resolveRule,
+  resolveActiveRule,
   STYLE_ICONS,
 } from "../../lib/list-styles";
 
@@ -79,7 +80,7 @@ export default class StyleSelector extends Component {
       return preset?.icon ?? STYLE_ICONS[overrideStyle] ?? "sliders";
     }
 
-    return iconFor(resolveRule(this.scopeArgs));
+    return iconFor(resolveActiveRule(getOwner(this)));
   }
 
   @action
@@ -110,6 +111,7 @@ export default class StyleSelector extends Component {
                   @icon={{item.icon}}
                   @translatedLabel={{item.label}}
                   @action={{fn this.select item.style}}
+                  aria-current={{if (eq this.current item.style) "true"}}
                   class={{dConcatClass
                     "btn-transparent list-style-selector__option"
                     (if (eq this.current item.style) "--active")
@@ -125,6 +127,7 @@ export default class StyleSelector extends Component {
                 @icon={{this.resetItem.icon}}
                 @translatedLabel={{this.resetItem.label}}
                 @action={{fn this.select "auto"}}
+                aria-current={{if (eq this.current "auto") "true"}}
                 class={{dConcatClass
                   "btn-transparent list-style-selector__option"
                   (if (eq this.current "auto") "--active")

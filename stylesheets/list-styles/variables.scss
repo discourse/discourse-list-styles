@@ -8,6 +8,8 @@
   --list-styles-card-radius: var(--d-border-radius-large);
   --list-styles-card-padding: var(--space-3);
   --list-styles-card-background: var(--secondary);
-  --list-styles-card-shadow: 0 1px 3px rgb(0, 0, 0, 0.08);
+  --shadow-card-subtle: 0 1px 3px
+    light-dark(rgb(0, 0, 0, 0.08), rgb(0, 0, 0, 0.25));
+  --list-styles-card-shadow: var(--shadow-card-subtle);
   --list-styles-row-padding: var(--space-4);
 }

@@ -1,7 +1,7 @@
 import Component from "@glimmer/component";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
-import { service } from "@ember/service";
+import { getOwner } from "@ember/owner";
 import PluginOutlet from "discourse/components/plugin-outlet";
 import BulkSelectCheckbox from "discourse/components/topic-list/bulk-select-checkbox";
 import TopicExcerpt from "discourse/components/topic-list/topic-excerpt";
@@ -14,29 +14,12 @@ import { categoryLinkHTML } from "discourse/ui-kit/helpers/d-category-link";
 import dFormatDate from "discourse/ui-kit/helpers/d-format-date";
 import dNumber from "discourse/ui-kit/helpers/d-number";
 import { i18n } from "discourse-i18n";
-import { overrideStyleFor, resolveRule } from "../../lib/list-styles";
+import { resolveActiveRule } from "../../lib/list-styles";
 import TopicThumbnail from "./topic-thumbnail";
 
 export default class Card extends Component {
-  @service discovery;
-  @service listStyleOverride;
-  @service router;
-
-  get rule() {
-    const scope = {
-      category: this.discovery.category,
-      tag: this.discovery.tag,
-    };
-
-    return resolveRule({
-      ...scope,
-      forcedStyle: this.router.currentRoute?.metadata?.customTopicListStyle,
-      overrideStyle: overrideStyleFor(this.listStyleOverride, scope),
-    });
-  }
-
   get showExcerpt() {
-    return this.rule.show_excerpt;
+    return resolveActiveRule(getOwner(this)).show_excerpt;
   }
 
   @action
@@ -91,7 +74,7 @@ export default class Card extends Component {
       </div>
 
       {{#if this.showExcerpt}}
-        <TopicExcerpt @topic={{@topic}} class="list-styles-card__excerpt" />
+        <TopicExcerpt @topic={{@topic}} />
       {{/if}}
 
       <div class="list-styles-card__meta">
