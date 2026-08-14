@@ -1,9 +1,10 @@
 import HeaderTopicCell from "discourse/components/topic-list/header/topic-cell";
 import { apiInitializer } from "discourse/lib/api";
 import Card from "../components/list-styles/card";
+import MobileRow from "../components/list-styles/mobile-row";
 import RowThumbnail from "../components/list-styles/row-thumbnail";
 import StyleSelector from "../components/list-styles/style-selector";
-import { CARD_GRID, overrideStyleFor, resolveRule } from "../lib/list-styles";
+import { CARD_GRID, resolveActiveRule } from "../lib/list-styles";
 
 const CORE_COLUMNS = [
   "bulk-select",
@@ -17,24 +18,12 @@ const CORE_COLUMNS = [
 ];
 
 export default apiInitializer((api) => {
-  const discovery = api.container.lookup("service:discovery");
-  const router = api.container.lookup("service:router");
-  const override = api.container.lookup("service:list-style-override");
-
   function activeRule(context) {
     if (context.listContext !== "discovery") {
       return null;
     }
 
-    const category = context.category ?? discovery.category;
-    const tag = discovery.tag;
-
-    return resolveRule({
-      category,
-      tag,
-      forcedStyle: router.currentRoute?.metadata?.customTopicListStyle,
-      overrideStyle: overrideStyleFor(override, { category, tag }),
-    });
+    return resolveActiveRule(api.container, { category: context.category });
   }
 
   api.renderInOutlet("topic-list-before-link", RowThumbnail);
@@ -48,20 +37,28 @@ export default apiInitializer((api) => {
     return value;
   });
 
+  const site = api.container.lookup("service:site");
+
+  function replaceColumns(columns, name, item) {
+    CORE_COLUMNS.forEach((key) => {
+      if (columns.has(key)) {
+        columns.delete(key);
+      }
+    });
+    columns.add(name, { header: HeaderTopicCell, item });
+  }
+
   api.registerValueTransformer(
     "topic-list-columns",
     ({ value: columns, context }) => {
-      if (activeRule(context)?.style === CARD_GRID) {
-        CORE_COLUMNS.forEach((key) => {
-          if (columns.has(key)) {
-            columns.delete(key);
-          }
-        });
-        columns.add("list-styles-card", {
-          header: HeaderTopicCell,
-          item: Card,
-        });
+      const rule = activeRule(context);
+
+      if (rule?.style === CARD_GRID) {
+        replaceColumns(columns, "list-styles-card", Card);
+      } else if (rule && site.mobileView) {
+        replaceColumns(columns, "list-styles-mobile-row", MobileRow);
       }
+
       return columns;
     }
   );
@@ -79,7 +76,7 @@ export default apiInitializer((api) => {
   api.registerValueTransformer(
     "topic-list-item-mobile-layout",
     ({ value, context }) => {
-      if (activeRule(context)?.style === CARD_GRID) {
+      if (activeRule(context)) {
         return false;
       }
       return value;
