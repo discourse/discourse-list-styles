@@ -55,3 +55,11 @@ default_show_excerpt:
 allow_style_switching:
   type: bool
   default: true
+
+placeholder_icon:
+  type: icon
+  default: "far-image"
+
+animal_placeholders:
+  type: bool
+  default: false

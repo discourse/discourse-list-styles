@@ -5,7 +5,7 @@ import dIcon from "discourse/ui-kit/helpers/d-icon";
 const RESPONSIVE_RATIOS = [1, 1.5, 2];
 const DISPLAY_WIDTH = 400;
 const FALLBACK_WIDTH = 1110;
-const PLACEHOLDER_ICONS = [
+const ANIMAL_ICONS = [
   "kiwi-bird",
   "frog",
   "hippo",
@@ -26,7 +26,12 @@ export default class TopicThumbnail extends Component {
   }
 
   get placeholderIcon() {
-    return PLACEHOLDER_ICONS[this.topic.id % PLACEHOLDER_ICONS.length];
+    if (settings.animal_placeholders) {
+      // stable per topic so the icon doesn't change between renders
+      return ANIMAL_ICONS[this.topic.id % ANIMAL_ICONS.length];
+    }
+
+    return settings.placeholder_icon || null;
   }
 
   get original() {
@@ -87,7 +92,9 @@ export default class TopicThumbnail extends Component {
         />
       {{else}}
         <div class="list-styles-thumbnail__placeholder">
-          {{dIcon this.placeholderIcon}}
+          {{#if this.placeholderIcon}}
+            {{dIcon this.placeholderIcon}}
+          {{/if}}
         </div>
       {{/if}}
     </a>
