@@ -2,9 +2,13 @@ import HeaderTopicCell from "discourse/components/topic-list/header/topic-cell";
 import { apiInitializer } from "discourse/lib/api";
 import Card from "../components/list-styles/card";
 import MobileRow from "../components/list-styles/mobile-row";
-import RowThumbnail from "../components/list-styles/row-thumbnail";
 import StyleSelector from "../components/list-styles/style-selector";
-import { CARD_GRID, resolveActiveRule } from "../lib/list-styles";
+import ThumbnailTopicCell from "../components/list-styles/thumbnail-topic-cell";
+import {
+  CARD_GRID,
+  resolveActiveRule,
+  THUMBNAIL_LIST,
+} from "../lib/list-styles";
 
 const CORE_COLUMNS = [
   "bulk-select",
@@ -26,7 +30,6 @@ export default apiInitializer((api) => {
     return resolveActiveRule(api.container, { category: context.category });
   }
 
-  api.renderInOutlet("topic-list-before-link", RowThumbnail);
   api.renderInOutlet("before-create-topic-button", StyleSelector);
 
   api.registerValueTransformer("topic-list-class", ({ value, context }) => {
@@ -57,6 +60,8 @@ export default apiInitializer((api) => {
         replaceColumns(columns, "list-styles-card", Card);
       } else if (rule && site.mobileView) {
         replaceColumns(columns, "list-styles-mobile-row", MobileRow);
+      } else if (rule?.style === THUMBNAIL_LIST) {
+        columns.replace("topic", { item: ThumbnailTopicCell });
       }
 
       return columns;
