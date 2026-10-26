@@ -30,6 +30,8 @@ export default class StyleSelector extends Component {
     return (
       settings.allow_style_switching &&
       this.discovery.onDiscoveryRoute &&
+      // The categories page renders no TopicList, so there is no style to switch
+      this.router.currentRouteName !== "discovery.categories" &&
       !this.router.currentRoute?.metadata?.customTopicListStyle &&
       this.presetItems.length > 0
     );
